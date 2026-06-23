@@ -1,11 +1,15 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 import psycopg
+import os
 
 app = Flask(__name__)
 CORS(app)
 
 def get_db():
+    url = os.environ.get("DATABASE_URL")
+    if url:
+        return psycopg.connect(url)
     return psycopg.connect(
         host="localhost",
         dbname="park",
