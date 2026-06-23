@@ -1,10 +1,12 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
+from flask_socketio import SocketIO
 import psycopg
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode="eventlet")
 
 def get_db():
     url = os.environ.get("DATABASE_URL")
@@ -56,7 +58,11 @@ def toggle_zona(zona_id):
     )
     conn.commit()
     conn.close()
+
+    # Emitir a todos los clientes conectados
+    socketio.emit("zona_actualizada", {"id": zona_id, "estado": nuevo_estado})
+
     return jsonify({"id": zona_id, "estado": nuevo_estado})
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0")
+    socketio.run(app, debug=True, host="0.0.0.0")

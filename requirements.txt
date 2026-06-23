@@ -1,4 +1,6 @@
 flask
 flask-cors
+flask-socketio
 psycopg[binary]
+eventlet
 gunicorn
