@@ -1,7 +1,4 @@
 flask
 flask-cors
-flask-socketio
 psycopg[binary]
-gevent
-gevent-websocket
 gunicorn
