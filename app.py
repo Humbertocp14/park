@@ -58,5 +58,14 @@ def toggle_zona(zona_id):
     conn.close()
     return jsonify({"id": zona_id, "estado": nuevo_estado})
 
+@app.route("/api/bardas", methods=["GET"])
+def get_bardas():
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT id, x1, y1, x2, y2 FROM bardas ORDER BY id")
+    rows = cur.fetchall()
+    conn.close()
+    return jsonify([{"id": r[0], "x1": r[1], "y1": r[2], "x2": r[3], "y2": r[4]} for r in rows])
+
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")
